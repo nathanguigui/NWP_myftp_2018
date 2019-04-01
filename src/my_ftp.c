@@ -12,7 +12,7 @@ int main(int ac, char const **av)
     int server_socket = socket(AF_INET, SOCK_STREAM, 0);
     struct sockaddr_in sin = {0};
     sin.sin_addr.s_addr = htonl(INADDR_ANY);
-    sin.sin_port = htons(80);
+    sin.sin_port = htons(7878);
     sin.sin_family = AF_INET;
 
     int client_socket;
@@ -41,11 +41,16 @@ int main(int ac, char const **av)
         exit(errno);
     }
     
-    write(connected_socket_fd, SERVICE_READY, 4);
+    write(connected_socket_fd, "220\n", 4);
     char buff[2048];
     for (ssize_t read_b = 1; read_b; read(connected_socket_fd, buff, 2048)) {
-        if (strcmp("USER Anonymous", buff) == 0)
-            write(connected_socket_fd, WAIT_PASS, 4);
+        if (strncmp("USER", buff, 4) == 0) {
+            write(connected_socket_fd, "230\n", 4);
+            write(connected_socket_fd, "331\n", 4);
+        }
+        if (strncmp("PASS", buff, 4) == 0) {
+            write(connected_socket_fd, "230\n", 4);
+        }
     }
 
     return (0);
