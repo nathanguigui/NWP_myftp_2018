@@ -33,6 +33,26 @@ int main(int ac, char const **av)
         exit(errno);
     }
 
+    connect_client(server_socket, csin);
+    return (0);
+}
+
+int auth_user(int connected_socket_fd, char *buff)
+{
+    if (strncmp("USER", buff, 4) == 0) {
+        write(connected_socket_fd, "230\n", 4);
+        write(connected_socket_fd, "331\n", 4);
+        read(connected_socket_fd, buff, 2048);
+        if (strncmp("PASS", buff, 4) == 0) {
+            write(connected_socket_fd, "230\n", 4);
+            return (1);
+        }
+    }
+    return (0);
+}
+
+int connect_client(int server_socket, struct sockaddr_in csin)
+{
     int csin_size = sizeof(csin);
 
     int connected_socket_fd = accept(server_socket, (struct sockaddr *)&csin, &csin_size);
@@ -43,15 +63,9 @@ int main(int ac, char const **av)
     
     write(connected_socket_fd, "220\n", 4);
     char buff[2048];
-    for (ssize_t read_b = 1; read_b; read(connected_socket_fd, buff, 2048)) {
-        if (strncmp("USER", buff, 4) == 0) {
-            write(connected_socket_fd, "230\n", 4);
-            write(connected_socket_fd, "331\n", 4);
-        }
-        if (strncmp("PASS", buff, 4) == 0) {
-            write(connected_socket_fd, "230\n", 4);
-        }
-    }
-
-    return (0);
+    do {
+        read(connected_socket_fd, buff, 2048);
+        auth_user(connected_socket_fd, buff);
+        memset(buff, 0, 2048);
+    } while (strcmp("QUIT", buff) != 0);
 }
