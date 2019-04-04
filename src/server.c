@@ -7,25 +7,6 @@
 
 #include "my_ftp.h"
 
-int start_server(server_t *server)
-{
-    if (server->server_socket == -1) {
-        perror("socket()");
-        return (-1);
-    }
-
-    if (bind(server->server_socket, (struct sockaddr *)&server->sin, server->csin_size)) {
-        perror("bind()");
-        return (-1);
-    }
-
-    if (listen(server->server_socket, 5)) {
-        perror("listen()");
-        return (-1);
-    }
-    return (0);
-}
-
 int check_arg(char const **av, int ac, server_t *server)
 {
     if (ac != 3)

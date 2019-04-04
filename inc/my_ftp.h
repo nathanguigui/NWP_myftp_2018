@@ -10,6 +10,7 @@
 
 #include <errno.h>
 #include <string.h>
+#include <strings.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,8 +29,5 @@ typedef struct server_s {
     int port;
     char *folder;
 } server_t;
-
-int check_arg(char const**, int, server_t*);
-int start_server(server_t*);
 
 #endif /* !MY_FTP_H_ */
