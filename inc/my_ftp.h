@@ -19,15 +19,21 @@
 #include <sys/types.h>
 #include <netdb.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
+#include "my_code.h"
 
 typedef struct server_s {
-    struct sockaddr_in sin;
-    int server_socket;
-    struct sockaddr_in csin;
-    int client_socket;
-    int csin_size;
-    int port;
-    char *folder;
+    int connected;
+    int socket;
+    char *root_dir;
+    char *user;
+    char *input;
 } server_t;
+
+int auth_user(server_t*);
+int check_pass(server_t*);
+int pwd_cmd(server_t*);
+int wrong_cmd(server_t*);
+int other_cmd(server_t*);
 
 #endif /* !MY_FTP_H_ */

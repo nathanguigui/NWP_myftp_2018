@@ -5,7 +5,7 @@ CC	= gcc
 RM	= rm -f
 
 SRCS	= 	src/my_ftp.c \
-			src/server.c
+			src/commands.c
 
 OBJS	= $(SRCS:.c=.o)
 
