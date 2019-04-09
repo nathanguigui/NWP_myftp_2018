@@ -7,55 +7,55 @@
 
 #include "my_ftp.h"
 
-int check_pass(server_t *server)
+int check_pass(client_t *client)
 {
-    if (server->connected != AWAITING_PASS)
-        return (write(server->socket, "500\n", 4));
-    write(server->socket, "230\n", 4);
-    printf("[SERVER]\tuser connected\n");
-    server->connected = CONNECTED;
+    if (client->connected == CONNECTED)
+        return (write_client(client, "230 Already logged in.\n")); 
+    if (client->connected != AWAITING_PASS)
+        return (write_client(client, "503 Login with USER first.\n"));
+    if (strcasecmp(client->user, "anonymous"))
+        return (write_client(client, "530 Login incorrect.\n"));
+    write_client(client, "230 Login successful.\n");
+    client->connected = CONNECTED;
     return (0);
 }
 
-int auth_user(server_t *server)
+int auth_user(client_t *client)
 {
-    if (server->connected == AWAITING_PASS || server->connected == CONNECTED)
-        return (write(server->socket, "500\n", 4));
-    write(server->socket, "230\n", 4);
-    write(server->socket, "331\n", 4);
-    server->input[strlen(server->input) - 1] = 0;
-    printf("[SERVER]\tuser trying to connect as %s\n", server->input + 5);
-    server->connected = AWAITING_PASS;
-    server->user = strdup(server->input + 5);
+    if (client->connected == CONNECTED)
+        return (write_client(client, "530 Can't change from guest user.\n"));
+    write_client(client, "331 Please specifiy password.\n");
+    client->connected = AWAITING_PASS;
+    client->user = strdup(client->input + 5);
     return (0);
 }
 
-int wrong_cmd(server_t *server)
+int wrong_cmd(client_t *client)
 {
-    server->connected = 0;
-    write(server->socket, "500\n", 4);
+    client->connected = 0;
+    write_client(client, "500 Unknown command.\n");
     return (0);
 }
 
-int pwd_cmd(server_t *server)
+int pwd_cmd(client_t *client)
 {
-    char buff[1024];
     char *pwd = NULL;
-    getcwd(buff, sizeof(buff));
-    pwd = strcat(strcat("230 ", pwd), "\n");
-    write(server->socket, pwd, strlen(pwd));
+    pwd = strcat(strcat("257 \"", client->wd), "\"\n");
+    write(client->socket, pwd, strlen(pwd));
     return (0);
 }
 
-int other_cmd(server_t *server)
+int other_cmd(client_t *client)
 {
-    write(1, server->input, strlen(server->input));
-    int status = -1;
-    if (strncasecmp("PWD", server->input, 3) == 0)
-        status = pwd_cmd(server);
-    if (strncasecmp("WHOAMI", server->input, 6) == 0)
-        status = dprintf(server->socket, "230 %s\n", server->user);
-    if (status == -1)
-        wrong_cmd(server);
+    if (strncasecmp("PWD", client->input, 3) == 0)
+        pwd_cmd(client);
+    if (strncasecmp("HELP", client->input, 4) == 0)
+        help_cmd(client);
+    if (strncasecmp("NOOP", client->input, 4) == 0)
+        noop_cmd(client);
+    if (strncasecmp("QUIT", client->input, 4) == 0)
+        quit_cmd(client);
+    if (!check_cmd(client->input))
+        wrong_cmd(client);
     return (0);
 }
