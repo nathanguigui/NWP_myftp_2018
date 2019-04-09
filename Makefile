@@ -1,3 +1,10 @@
+##
+## EPITECH PROJECT, 2019
+## NWP_myftp_2018
+## File description:
+## Makefile
+##
+
 NAME	= myftp
 
 CC	= gcc
@@ -5,8 +12,10 @@ CC	= gcc
 RM	= rm -f
 
 SRCS	= 	src/my_ftp.c \
+			src/client.c \
+			src/server.c \
 			src/commands.c \
-			src/commands.2.c \
+			src/commands2.c \
 			src/utils.c
 
 OBJS	= $(SRCS:.c=.o)

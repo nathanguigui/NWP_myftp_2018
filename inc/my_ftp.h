@@ -21,10 +21,14 @@
 #include <netinet/in.h>
 #include <sys/time.h>
 #include <arpa/inet.h>
-#include "my_code.h"
 
 #define MAX_CLIENTS 5
 #define TRUE 1
+#define AWAITING_PASS 2
+#define CONNECTED 1
+#define ERROR -1
+
+typedef struct sockaddr * SOCK;
 
 typedef struct server_s {
     int connected;
@@ -53,19 +57,21 @@ typedef struct core_s {
     char *root_dir;
 } core_t;
 
-int auth_user(client_t*);
-int check_pass(client_t*);
-int pwd_cmd(client_t*);
-int wrong_cmd(client_t*);
-int other_cmd(client_t*);
-void read_input(client_t*);
-int quit_cmd(client_t*);
-int noop_cmd(client_t*);
-int help_cmd(client_t*);
-
-int read_client(client_t*);
+int auth_user(client_t *);
+int check_pass(client_t *);
+int pwd_cmd(client_t *);
+int wrong_cmd(client_t *);
+int other_cmd(client_t *);
+void read_input(client_t *);
+int quit_cmd(client_t *);
+int noop_cmd(client_t *);
+int help_cmd(client_t *);
+void server_base(int, char const **);
+void client_manage(core_t *, int, int, struct sockaddr_in);
+int read_client(client_t *);
 int write_client(client_t *client, char *to_write);
-int my_error(char*);
-int check_cmd(char*);
+int my_error(char *);
+int check_cmd(char *);
+char *my_strcat(char *, char *);
 
 #endif /* !MY_FTP_H_ */

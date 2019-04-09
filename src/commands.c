@@ -10,12 +10,12 @@
 int check_pass(client_t *client)
 {
     if (client->connected == CONNECTED)
-        return (write_client(client, "230 Already logged in.\n")); 
+        return (write_client(client, "230 Already logged in.\r\n"));
     if (client->connected != AWAITING_PASS)
-        return (write_client(client, "503 Login with USER first.\n"));
+        return (write_client(client, "503 Login with USER first.\r\n"));
     if (strcasecmp(client->user, "anonymous"))
-        return (write_client(client, "530 Login incorrect.\n"));
-    write_client(client, "230 Login successful.\n");
+        return (write_client(client, "530 Login incorrect.\r\n"));
+    write_client(client, "230 Login successful.\r\n");
     client->connected = CONNECTED;
     return (0);
 }
@@ -23,8 +23,8 @@ int check_pass(client_t *client)
 int auth_user(client_t *client)
 {
     if (client->connected == CONNECTED)
-        return (write_client(client, "530 Can't change from guest user.\n"));
-    write_client(client, "331 Please specifiy password.\n");
+        return (write_client(client, "530 Can't change from guest user.\r\n"));
+    write_client(client, "331 Please specifiy password.\r\n");
     client->connected = AWAITING_PASS;
     client->user = strdup(client->input + 5);
     return (0);
@@ -33,15 +33,13 @@ int auth_user(client_t *client)
 int wrong_cmd(client_t *client)
 {
     client->connected = 0;
-    write_client(client, "500 Unknown command.\n");
+    write_client(client, "500 Unknown command.\r\n");
     return (0);
 }
 
 int pwd_cmd(client_t *client)
 {
-    char *pwd = NULL;
-    pwd = strcat(strcat("257 \"", client->wd), "\"\n");
-    write(client->socket, pwd, strlen(pwd));
+    write_client(client, my_strcat(my_strcat("257 \"", client->wd), "\"\r\n"));
     return (0);
 }
 
