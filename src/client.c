@@ -22,7 +22,9 @@ int client_shell(int i, core_t *CORE)
 {
     client_t *CLIENT = CORE->clients[i];
 
-    if (read_client(CLIENT) == -1) {
+    if (read_client(CLIENT) == -1 ||
+    (strncasecmp("QUIT", CLIENT->input, 4) == 0)) {
+        quit_cmd(CORE, i);
         close(CORE->client_fds[i]);
         CORE->client_fds[i] = 0;
         CORE->clients[i] = NULL;
@@ -34,7 +36,7 @@ int client_shell(int i, core_t *CORE)
         if (CLIENT->connected == CONNECTED)
             other_cmd(CLIENT);
         else if (!check_cmd(CLIENT->input))
-            write_client(CLIENT, "530 Please login with USER and PASS.\r\n");
+            write_client(CLIENT, "530 Please login with USER and PASS.\n");
     }
     return (0);
 }
@@ -43,19 +45,20 @@ void client_manage(core_t *CORE, int cli_socket, int sd,
 struct sockaddr_in csin)
 {
     socklen_t csin_size = sizeof(csin);
+    int i = 0;
 
     if (FD_ISSET(CORE->mSocket, CORE->readfds)) {
         cli_socket = accept(CORE->mSocket, (SOCK)&csin, &csin_size);
         if (cli_socket < 0)
             my_error("accept()");
-        write(cli_socket, "220\r\n", 4);
-        for (int i = 0; i < MAX_CLIENTS; i++) {
+        for (i = 0; i < MAX_CLIENTS; i++) {
             if (CORE->client_fds[i] == 0) {
                 CORE->client_fds[i] = cli_socket;
                 CORE->clients[i] = init_client(CORE, cli_socket);
                 break;
             }
         }
+        write_client(CORE->clients[i], "220\n");
     }
     for (int i = 0; i < MAX_CLIENTS; i++) {
         sd = CORE->client_fds[i];

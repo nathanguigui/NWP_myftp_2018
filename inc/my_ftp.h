@@ -63,7 +63,7 @@ int pwd_cmd(client_t *);
 int wrong_cmd(client_t *);
 int other_cmd(client_t *);
 void read_input(client_t *);
-int quit_cmd(client_t *);
+int quit_cmd(core_t *, int);
 int noop_cmd(client_t *);
 int help_cmd(client_t *);
 void server_base(int, char const **);

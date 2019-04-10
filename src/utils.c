@@ -12,7 +12,7 @@ int read_client(client_t *client)
     char buff[2048];
     if (read(client->socket, buff, 2048) == 0)
         return (-1);
-    client->input = strtok(buff, "\n");
+    client->input = strtok(buff, "\r");
     return (0);
 }
 
