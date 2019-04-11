@@ -26,7 +26,7 @@ int auth_user(client_t *client)
         return (write_client(client, "530 Can't change from guest user.\n"));
     write_client(client, "331 Please specifiy password.\n");
     client->connected = AWAITING_PASS;
-    client->user = strdup(client->input + 5);
+    client->user = strdup(client->input[1]);
     return (0);
 }
 
@@ -45,13 +45,13 @@ int pwd_cmd(client_t *client)
 
 int other_cmd(client_t *client)
 {
-    if (strncasecmp("PWD", client->input, 3) == 0)
+    if (strcasecmp("PWD", client->input[0]) == 0)
         pwd_cmd(client);
-    if (strncasecmp("HELP", client->input, 4) == 0)
+    if (strcasecmp("HELP", client->input[0]) == 0)
         help_cmd(client);
-    if (strncasecmp("NOOP", client->input, 4) == 0)
+    if (strcasecmp("NOOP", client->input[0]) == 0)
         noop_cmd(client);
-    if (!check_cmd(client->input))
+    if (check_cmd(client->input[0]))
         wrong_cmd(client);
     return (0);
 }

@@ -30,22 +30,13 @@
 
 typedef struct sockaddr * SOCK;
 
-typedef struct server_s {
-    int connected;
-    int socket;
-    char *root_dir;
-    char *wd;
-    char *user;
-    char *input;
-} server_t;
-
 typedef struct client_s {
     int connected;
     int socket;
     char *root_dir;
     char *wd;
     char *user;
-    char *input;
+    char **input;
 } client_t;
 
 typedef struct core_s {
@@ -73,5 +64,6 @@ int write_client(client_t *client, char *to_write);
 int my_error(char *);
 int check_cmd(char *);
 char *my_strcat(char *, char *);
+char **str_to_tab(char*, char);
 
 #endif /* !MY_FTP_H_ */

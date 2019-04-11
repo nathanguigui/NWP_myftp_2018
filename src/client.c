@@ -23,19 +23,19 @@ int client_shell(int i, core_t *CORE)
     client_t *CLIENT = CORE->clients[i];
 
     if (read_client(CLIENT) == -1 ||
-    (strncasecmp("QUIT", CLIENT->input, 4) == 0)) {
+    (strcasecmp("QUIT", CLIENT->input[0]) == 0)) {
         quit_cmd(CORE, i);
         close(CORE->client_fds[i]);
         CORE->client_fds[i] = 0;
         CORE->clients[i] = NULL;
     } else {
-        if (strncasecmp("USER", CLIENT->input, 4) == 0)
+        if (strcasecmp("USER", CLIENT->input[0]) == 0)
             auth_user(CLIENT);
-        if (strncasecmp("PASS", CLIENT->input, 4) == 0)
+        if (strcasecmp("PASS", CLIENT->input[0]) == 0)
             check_pass(CLIENT);
         if (CLIENT->connected == CONNECTED)
             other_cmd(CLIENT);
-        else if (!check_cmd(CLIENT->input))
+        if (check_cmd(CLIENT->input[0]) && CLIENT->connected != CONNECTED)
             write_client(CLIENT, "530 Please login with USER and PASS.\n");
     }
     return (0);

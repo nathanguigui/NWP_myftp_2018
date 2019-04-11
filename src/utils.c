@@ -10,9 +10,12 @@
 int read_client(client_t *client)
 {
     char buff[2048];
+    char *tmp = NULL;
+
     if (read(client->socket, buff, 2048) == 0)
         return (-1);
-    client->input = strtok(buff, "\r");
+    tmp = strtok(buff, "\r");
+    client->input = str_to_tab(tmp, ' ');
     return (0);
 }
 
@@ -53,17 +56,17 @@ char *my_strcat(char *str1, char *str2)
 
 int check_cmd(char *str)
 {
-    if (strncasecmp("USER", str, 4) == 0)
-        return (1);
-    if (strncasecmp("PASS", str, 4) == 0)
-        return (1);
-    if (strncasecmp("NOOP", str, 4) == 0)
-        return (1);
-    if (strncasecmp("PWD", str, 3) == 0)
-        return (1);
-    if (strncasecmp("QUIT", str, 4) == 0)
-        return (1);
-    if (strncasecmp("HELP", str, 4) == 0)
-        return (1);
-    return (0);
+    if (strcasecmp("USER", str) == 0)
+        return (0);
+    if (strcasecmp("PASS", str) == 0)
+        return (0);
+    if (strcasecmp("NOOP", str) == 0)
+        return (0);
+    if (strcasecmp("PWD", str) == 0)
+        return (0);
+    if (strcasecmp("QUIT", str) == 0)
+        return (0);
+    if (strcasecmp("HELP", str) == 0)
+        return (0);
+    return (-1);
 }
