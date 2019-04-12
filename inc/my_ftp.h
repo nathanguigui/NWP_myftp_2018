@@ -30,7 +30,7 @@
 #define CONNECTED 1
 #define ERROR -1
 
-typedef struct sockaddr* SOCK;
+typedef struct sockaddr * SOCK;
 
 typedef struct client_s {
     int connected;

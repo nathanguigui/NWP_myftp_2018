@@ -15,5 +15,6 @@ int dele_cmd(client_t *client)
         return (write_client(client, "450 Requested file action not taken.\n"));
     if (unlink(realpath(client->input[1], NULL)))
         return (write_client(client, "450 Requested file action not taken.\n"));
-    return (write_client(client, "250 Requested file action okay, completed.\n"));
+    write_client(client, "250 Requested file action okay, completed.\n");
+    return (0);
 }

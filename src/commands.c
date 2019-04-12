@@ -32,7 +32,6 @@ int auth_user(client_t *client)
 
 int wrong_cmd(client_t *client)
 {
-    client->connected = 0;
     write_client(client, "500 Unknown command.\n");
     return (0);
 }
@@ -46,17 +45,17 @@ int pwd_cmd(client_t *client)
 int other_cmd(client_t *client)
 {
     if (strcasecmp("PWD", client->input[0]) == 0)
-        pwd_cmd(client);
+        return (pwd_cmd(client));
     if (strcasecmp("HELP", client->input[0]) == 0)
-        help_cmd(client);
+        return (help_cmd(client));
     if (strcasecmp("NOOP", client->input[0]) == 0)
-        noop_cmd(client);
+        return (noop_cmd(client));
     if (strcasecmp("CDUP", client->input[0]) == 0)
-        cdup_cmd(client);
+        return (cdup_cmd(client));
     if (strcasecmp("CWD", client->input[0]) == 0)
-        cwd_cmd(client);
+        return (cwd_cmd(client));
     if (strcasecmp("DELE", client->input[0]) == 0)
-        dele_cmd(client);
+        return (dele_cmd(client));
     if (check_cmd(client->input[0]))
         wrong_cmd(client);
     return (0);

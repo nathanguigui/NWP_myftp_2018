@@ -31,12 +31,12 @@ int client_shell(int i, core_t *CORE)
     } else {
         chdir(CLIENT->wd);
         if (strcasecmp("USER", CLIENT->input[0]) == 0)
-            auth_user(CLIENT);
+            return (auth_user(CLIENT));
         if (strcasecmp("PASS", CLIENT->input[0]) == 0)
-            check_pass(CLIENT);
+            return (check_pass(CLIENT));
         if (CLIENT->connected == CONNECTED)
-            other_cmd(CLIENT);
-        if (check_cmd(CLIENT->input[0]) && CLIENT->connected != CONNECTED)
+            return (other_cmd(CLIENT));
+        if (CLIENT->connected != CONNECTED)
             write_client(CLIENT, "530 Please login with USER and PASS.\n");
     }
     return (0);
