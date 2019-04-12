@@ -24,7 +24,7 @@ int check_arg(int ac, char const **av, struct sockaddr_in *sin)
 core_t *init_core(const char **av, int server_socket)
 {
     core_t *CORE = malloc(sizeof(core_t));
-    CORE->root_dir = strdup(av[2]);
+    CORE->root_dir = realpath(av[2], NULL);
     CORE->mSocket = server_socket;
     CORE->readfds = malloc(sizeof(fd_set));
     for (int i = 0; i < MAX_CLIENTS; i++) {
@@ -38,6 +38,7 @@ int start_server(int server_socket, struct sockaddr_in csin, const char **av)
 {
     core_t *CORE = init_core(av, server_socket);
     int activity;
+
     while (1) {
         FD_ZERO(CORE->readfds);
         FD_SET(CORE->mSocket, CORE->readfds);
@@ -52,6 +53,7 @@ int start_server(int server_socket, struct sockaddr_in csin, const char **av)
         if ((activity < 0) && (errno != EINTR))
             my_error("select()");
         client_manage(CORE, 0, 0, csin);
+        chdir(CORE->root_dir);
     }
     return (0);
 }

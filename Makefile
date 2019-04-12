@@ -17,7 +17,8 @@ SRCS	= 	src/my_ftp.c \
 			src/commands.c \
 			src/commands2.c \
 			src/str_to_tab.c \
-			src/utils.c
+			src/utils.c \
+			src/utils2.c
 
 OBJS	= $(SRCS:.c=.o)
 

@@ -14,9 +14,11 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <dirent.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <sys/time.h>
@@ -28,7 +30,7 @@
 #define CONNECTED 1
 #define ERROR -1
 
-typedef struct sockaddr * SOCK;
+typedef struct sockaddr* SOCK;
 
 typedef struct client_s {
     int connected;
@@ -53,17 +55,20 @@ int check_pass(client_t *);
 int pwd_cmd(client_t *);
 int wrong_cmd(client_t *);
 int other_cmd(client_t *);
-void read_input(client_t *);
 int quit_cmd(core_t *, int);
 int noop_cmd(client_t *);
 int help_cmd(client_t *);
+int cwd_cmd(client_t *client);
+int cdup_cmd(client_t *client);
+
 void server_base(int, char const **);
 void client_manage(core_t *, int, int, struct sockaddr_in);
+
 int read_client(client_t *);
 int write_client(client_t *client, char *to_write);
 int my_error(char *);
 int check_cmd(char *);
 char *my_strcat(char *, char *);
-char **str_to_tab(char*, char);
-
+char **str_to_tab(char *, char);
+void read_input(client_t *);
 #endif /* !MY_FTP_H_ */

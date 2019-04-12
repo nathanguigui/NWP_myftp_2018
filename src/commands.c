@@ -51,6 +51,10 @@ int other_cmd(client_t *client)
         help_cmd(client);
     if (strcasecmp("NOOP", client->input[0]) == 0)
         noop_cmd(client);
+    if (strcasecmp("CDUP", client->input[0]) == 0)
+        cdup_cmd(client);
+    if (strcasecmp("CWD", client->input[0]) == 0)
+        cwd_cmd(client);
     if (check_cmd(client->input[0]))
         wrong_cmd(client);
     return (0);

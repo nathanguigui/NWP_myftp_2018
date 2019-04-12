@@ -23,8 +23,33 @@ int noop_cmd(client_t *client)
 
 int help_cmd(client_t *client)
 {
-    write_client(client, "214 \n");
-    write_client(client, " HELP NOOP PASS PWD QUIT USER\n");
     write_client(client, "214\n");
+    write_client(client, " CDUP CWD HELP NOOP PASS PWD QUIT USER\n");
+    write_client(client, "214\n");
+    return (0);
+}
+
+int cwd_cmd(client_t *client)
+{
+    char *mess;
+    DIR *tmp;
+    if (client->input[1] == NULL)
+        return (write_client(client, "501 Usage: CWD [PATH]\n"));
+    tmp = opendir(realpath(client->input[1], NULL));
+    if (tmp == NULL)
+        return (write_client(client, "501 Invalid path.\n"));
+    closedir(tmp);
+    client->wd = realpath(client->input[1], NULL);
+    asprintf(&mess, "250 '%s'\n", client->wd);
+    write_client(client, mess);
+    return (0);
+}
+
+int cdup_cmd(client_t *client)
+{
+    client->wd = realpath(my_strcat(client->wd, "/.."), NULL);
+    char *mess;
+    asprintf(&mess, "200 '%s'\n", client->wd);
+    write_client(client, mess);
     return (0);
 }

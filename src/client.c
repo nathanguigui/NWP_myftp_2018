@@ -29,6 +29,7 @@ int client_shell(int i, core_t *CORE)
         CORE->client_fds[i] = 0;
         CORE->clients[i] = NULL;
     } else {
+        chdir(CLIENT->wd);
         if (strcasecmp("USER", CLIENT->input[0]) == 0)
             auth_user(CLIENT);
         if (strcasecmp("PASS", CLIENT->input[0]) == 0)
