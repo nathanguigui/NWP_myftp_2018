@@ -58,8 +58,9 @@ int other_cmd(client_t *);
 int quit_cmd(core_t *, int);
 int noop_cmd(client_t *);
 int help_cmd(client_t *);
-int cwd_cmd(client_t *client);
-int cdup_cmd(client_t *client);
+int cwd_cmd(client_t *);
+int cdup_cmd(client_t *);
+int dele_cmd(client_t *);
 
 void server_base(int, char const **);
 void client_manage(core_t *, int, int, struct sockaddr_in);

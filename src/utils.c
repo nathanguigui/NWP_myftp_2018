@@ -72,5 +72,7 @@ int check_cmd(char *str)
         return (0);
     if (strcasecmp("CWD", str) == 0)
         return (0);
+    if (strcasecmp("DELE", str) == 0)
+        return (0);
     return (-1);
 }

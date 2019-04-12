@@ -55,6 +55,8 @@ int other_cmd(client_t *client)
         cdup_cmd(client);
     if (strcasecmp("CWD", client->input[0]) == 0)
         cwd_cmd(client);
+    if (strcasecmp("DELE", client->input[0]) == 0)
+        dele_cmd(client);
     if (check_cmd(client->input[0]))
         wrong_cmd(client);
     return (0);
