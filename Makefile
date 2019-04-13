@@ -18,12 +18,14 @@ SRCS	= 	src/my_ftp.c \
 			src/commands2.c \
 			src/commands3.c \
 			src/str_to_tab.c \
-			src/utils.c
+			src/passive.c \
+			src/utils.c \
+			src/utils2.c
 
 OBJS	= $(SRCS:.c=.o)
 
 CFLAGS = -I ./inc/
-CFLAGS += -Wall -Wextra
+CFLAGS += -Wall -Wextra -g3
 
 all: $(NAME)
 

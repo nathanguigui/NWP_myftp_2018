@@ -9,7 +9,7 @@
 
 int quit_cmd(core_t *CORE, int i)
 {
-    write_client(CORE->clients[i], "221\n");
+    write_client(CORE->clients[i], "221 Goodbye.\n");
     close(CORE->clients[i]->socket);
     CORE->clients[i] = NULL;
     return (0);
@@ -35,6 +35,8 @@ int cwd_cmd(client_t *client)
     DIR *tmp;
     if (client->input[1] == NULL)
         return (write_client(client, "501 Usage: CWD [PATH]\n"));
+    if (realpath(client->input[1], NULL) == NULL)
+        return (write_client(client, "501 Invalid path.\n"));
     tmp = opendir(realpath(client->input[1], NULL));
     if (tmp == NULL)
         return (write_client(client, "501 Invalid path.\n"));

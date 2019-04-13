@@ -15,22 +15,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <signal.h>
 
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <dirent.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <sys/time.h>
 #include <arpa/inet.h>
 
-#define MAX_CLIENTS 5
+#define MAX_CLIENTS 20
 #define TRUE 1
 #define AWAITING_PASS 2
 #define CONNECTED 1
 #define ERROR -1
 
 typedef struct sockaddr * SOCK;
+
+typedef struct pasv_s {
+    int port;
+    int pasvSocket;
+    int cliSocket;
+    struct sockaddr_in *csin;
+} pasv_t;
 
 typedef struct client_s {
     int connected;
@@ -39,6 +48,9 @@ typedef struct client_s {
     char *wd;
     char *user;
     char **input;
+    char *ip;
+    pasv_t *PASV;
+    pid_t PASV_pid;
 } client_t;
 
 typedef struct core_s {
@@ -61,6 +73,7 @@ int help_cmd(client_t *);
 int cwd_cmd(client_t *);
 int cdup_cmd(client_t *);
 int dele_cmd(client_t *);
+int pasv_cmd(client_t *);
 
 void server_base(int, char const **);
 void client_manage(core_t *, int, int, struct sockaddr_in);
@@ -72,4 +85,5 @@ int check_cmd(char *);
 char *my_strcat(char *, char *);
 char **str_to_tab(char *, char);
 void read_input(client_t *);
+char *get_ip(void);
 #endif /* !MY_FTP_H_ */

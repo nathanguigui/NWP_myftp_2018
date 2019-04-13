@@ -74,7 +74,7 @@ void server_base(int ac, char const **av)
         my_error("[SERVER][ERROR]  setsockopt()\t");
     if (bind(mSocket, (struct sockaddr *)&sin, sizeof(sin)))
         my_error("[SERVER][ERROR]  bind()\t");
-    if (listen(mSocket, 3))
+    if (listen(mSocket, 5))
         my_error("[SERVER][ERROR]  listen()\t");
     start_server(mSocket, csin, av);
 }

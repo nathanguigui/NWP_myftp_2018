@@ -7,15 +7,19 @@
 
 #include "my_ftp.h"
 
-client_t *init_client(core_t *CORE, int socket)
+void init_client(core_t *CORE, int sock, int i, struct sockaddr_in *csin)
 {
+    CORE->client_fds[i] = sock;
     client_t *client = malloc(sizeof(client_t));
     client->connected = 0;
     client->user = NULL;
-    client->socket = socket;
+    client->socket = sock;
     client->root_dir = strdup(CORE->root_dir);
     client->wd = strdup(CORE->root_dir);
-    return (client);
+    client->ip = inet_ntoa(csin->sin_addr);
+    CORE->clients[i] = client;
+    client->PASV = NULL;
+    client->PASV_pid = 0;
 }
 
 int client_shell(int i, core_t *CORE)
@@ -54,8 +58,7 @@ struct sockaddr_in csin)
             my_error("accept()");
         for (i = 0; i < MAX_CLIENTS; i++) {
             if (CORE->client_fds[i] == 0) {
-                CORE->client_fds[i] = cli_socket;
-                CORE->clients[i] = init_client(CORE, cli_socket);
+                init_client(CORE, cli_socket, i, &csin);
                 break;
             }
         }
