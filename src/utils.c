@@ -9,12 +9,14 @@
 
 int read_client(client_t *client)
 {
-    char buff[2048];
+    char *buff = NULL;
     char *tmp = NULL;
+    size_t len = 0;
 
-    if (read(client->socket, buff, 2048) == 0)
+    if (getline(&buff, &len, fdopen(client->socket, "r")) == 0)
         return (-1);
     tmp = strtok(buff, "\r");
+    tmp_buff = strdup(tmp);
     client->input = str_to_tab(tmp, ' ');
     return (0);
 }

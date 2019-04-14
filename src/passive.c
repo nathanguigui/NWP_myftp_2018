@@ -29,23 +29,35 @@ int pasv_server(client_t *client)
     return (0);
 }
 
-int pasv_proc(pasv_t *PASV, int *cliSocket)
+int pasv_proc(client_t *CLIENT, int cliSocket)
 {
     socklen_t csin_size = sizeof(struct sockaddr_in);
-    *cliSocket = accept(PASV->pasvSocket, (SOCK)PASV->csin, &csin_size);
-    if (*cliSocket < 0)
+    cliSocket = accept(CLIENT->PASV->pasvSocket, (SOCK)CLIENT->PASV->csin, &csin_size);
+    if (cliSocket < 0)
         my_error("[PASV] accept()");
+    char tmp_ip[INET_ADDRSTRLEN];
+    inet_ntop(AF_INET, &CLIENT->PASV->csin->sin_addr, tmp_ip, INET_ADDRSTRLEN);
+    if (strcmp(tmp_ip, CLIENT->ip)) {
+        write_client(CLIENT, "425 Security:Bad IP connecting.\n");
+        close(cliSocket);
+    }
+    pause();
+
+    char *buff = NULL;
+    size_t len = 0;
+    FILE *tmp = fdopen(CLIENT->socket, "r");
+    getline(&buff, &len, tmp);
+    write(cliSocket, buff, len);
+    write(cliSocket, "hello\n", 7);
+
+    close(cliSocket);
+    close(CLIENT->PASV->pasvSocket);
     return (0);
 }
 
 int clean_pasv(client_t *client)
 {
-    puts("test");
-    if (close(client->PASV->cliSocket))
-        puts("no pasv cli sock");
-    if (close(client->PASV->pasvSocket))
-        puts("no pasv socket");
-    kill(SIGKILL, client->PASV_pid);
+    kill(SIGABRT, client->PASV_pid);
     client->PASV = NULL;
     return (0);
 }
@@ -57,7 +69,7 @@ int pasv_cmd(client_t *client)
     pasv_server(client);
     client->PASV_pid = fork();
     if (client->PASV_pid == 0)
-        return (pasv_proc(client->PASV, &client->PASV->cliSocket));
+        return (pasv_proc(client, client->PASV->cliSocket));
     int p1 = client->PASV->port / 256;
     int p2 = client->PASV->port % 256;
     char *mess;

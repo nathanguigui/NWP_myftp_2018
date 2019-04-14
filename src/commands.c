@@ -58,6 +58,8 @@ int other_cmd(client_t *client)
         return (dele_cmd(client));
     if (strcasecmp("PASV", client->input[0]) == 0)
         return (pasv_cmd(client));
+    if (strcasecmp("LIST", client->input[0]) == 0)
+        return (list_cmd(client));
     if (check_cmd(client->input[0]))
         wrong_cmd(client);
     return (0);
