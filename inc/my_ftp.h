@@ -18,6 +18,8 @@
 #include <signal.h>
 
 #include <sys/socket.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <dirent.h>
@@ -93,5 +95,6 @@ int check_cmd(char *);
 char *my_strcat(char *, char *);
 char **str_to_tab(char *, char);
 void read_input(client_t *);
+int pasv_proc(client_t *CLIENT, pid_t);
 char *get_ip(void);
 #endif /* !MY_FTP_H_ */
