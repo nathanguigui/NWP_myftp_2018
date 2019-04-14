@@ -7,6 +7,12 @@
 
 #include "my_ftp.h"
 
+char *CMDS[NB_CMDS]  = {
+    "NOOP", "PWD", "HELP",
+    "CDUP", "CWD", "DELE",
+    "PASV", "LIST", "PORT"
+};
+
 int main(int ac, char const **av)
 {
     server_base(ac, av);

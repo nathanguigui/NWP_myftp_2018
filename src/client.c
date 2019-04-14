@@ -7,6 +7,19 @@
 
 #include "my_ftp.h"
 
+void init_commands(client_t *client)
+{
+    client->commands[0] = &noop_cmd;
+    client->commands[1] = &pwd_cmd;
+    client->commands[2] = &help_cmd;
+    client->commands[3] = &cdup_cmd;
+    client->commands[4] = &cwd_cmd;
+    client->commands[5] = &dele_cmd;
+    client->commands[6] = &pasv_cmd;
+    client->commands[7] = &list_cmd;
+    client->commands[8] = &port_cmd;
+}
+
 void init_client(core_t *CORE, int sock, int i, struct sockaddr_in *csin)
 {
     CORE->client_fds[i] = sock;
@@ -22,6 +35,7 @@ void init_client(core_t *CORE, int sock, int i, struct sockaddr_in *csin)
     client->PASV = NULL;
     client->PASV_pid = 0;
     client->actv_sock = 0;
+    init_commands(client);
 }
 
 int client_shell(int i, core_t *CORE)

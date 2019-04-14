@@ -61,25 +61,9 @@ int check_cmd(char *str)
         return (0);
     if (strcasecmp("PASS", str) == 0)
         return (0);
-    if (strcasecmp("NOOP", str) == 0)
-        return (0);
-    if (strcasecmp("PWD", str) == 0)
-        return (0);
-    if (strcasecmp("QUIT", str) == 0)
-        return (0);
-    if (strcasecmp("HELP", str) == 0)
-        return (0);
-    if (strcasecmp("CDUP", str) == 0)
-        return (0);
-    if (strcasecmp("CWD", str) == 0)
-        return (0);
-    if (strcasecmp("DELE", str) == 0)
-        return (0);
-    if (strcasecmp("PASV", str) == 0)
-        return (0);
-    if (strcasecmp("LIST", str) == 0)
-        return (0);
-    if (strcasecmp("PORT", str) == 0)
-        return (0);
+    for (int i = 0; i < NB_CMDS; i++) {
+        if (strcasecmp("NOOP", str) == 0)
+            return (0);
+    }
     return (-1);
 }

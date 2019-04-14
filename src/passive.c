@@ -32,7 +32,8 @@ int pasv_server(client_t *client)
 int pasv_proc(client_t *CLIENT, int cliSocket)
 {
     socklen_t csin_size = sizeof(struct sockaddr_in);
-    cliSocket = accept(CLIENT->PASV->pasvSocket, (SOCK)CLIENT->PASV->csin, &csin_size);
+    cliSocket = accept(CLIENT->PASV->pasvSocket, (SOCK)CLIENT->PASV->csin,
+    &csin_size);
     if (cliSocket < 0)
         my_error("[PASV] accept()");
     char tmp_ip[INET_ADDRSTRLEN];
@@ -42,14 +43,6 @@ int pasv_proc(client_t *CLIENT, int cliSocket)
         close(cliSocket);
     }
     pause();
-
-    char *buff = NULL;
-    size_t len = 0;
-    FILE *tmp = fdopen(CLIENT->socket, "r");
-    getline(&buff, &len, tmp);
-    write(cliSocket, buff, len);
-    write(cliSocket, "hello\n", 7);
-
     close(cliSocket);
     close(CLIENT->PASV->pasvSocket);
     return (0);

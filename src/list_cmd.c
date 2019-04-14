@@ -28,18 +28,11 @@ int list_actv(client_t *client)
     return (0);
 }
 
-int list_pasv(client_t *client)
-{
-    return (0);
-}
-
 int list_cmd(client_t *client)
 {
     if (client->PASV == NULL && client->actv_sock == 0)
         return (write_client(client, "425 Use PORT or PASV first.\n"));
     if (client->actv_sock)
         list_actv(client);
-    else
-        list_pasv(client);
     return (0);
 }

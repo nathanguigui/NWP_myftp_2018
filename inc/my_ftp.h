@@ -31,6 +31,8 @@
 #define AWAITING_PASS 2
 #define CONNECTED 1
 #define ERROR -1
+#define NB_CMDS 9
+extern char *CMDS[NB_CMDS];
 
 typedef struct sockaddr * SOCK;
 
@@ -53,6 +55,7 @@ typedef struct client_s {
     pid_t PASV_pid;
     in_addr_t sin_addr;
     int actv_sock;
+    int (*commands[NB_CMDS])(struct client_s *);
 } client_t;
 
 typedef struct core_s {

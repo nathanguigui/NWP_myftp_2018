@@ -44,24 +44,10 @@ int pwd_cmd(client_t *client)
 
 int other_cmd(client_t *client)
 {
-    if (strcasecmp("PWD", client->input[0]) == 0)
-        return (pwd_cmd(client));
-    if (strcasecmp("HELP", client->input[0]) == 0)
-        return (help_cmd(client));
-    if (strcasecmp("NOOP", client->input[0]) == 0)
-        return (noop_cmd(client));
-    if (strcasecmp("CDUP", client->input[0]) == 0)
-        return (cdup_cmd(client));
-    if (strcasecmp("CWD", client->input[0]) == 0)
-        return (cwd_cmd(client));
-    if (strcasecmp("DELE", client->input[0]) == 0)
-        return (dele_cmd(client));
-    if (strcasecmp("PASV", client->input[0]) == 0)
-        return (pasv_cmd(client));
-    if (strcasecmp("LIST", client->input[0]) == 0)
-        return (list_cmd(client));
-    if (strcasecmp("PORT", client->input[0]) == 0)
-        return (port_cmd(client));
+    for (int i = 0; i < NB_CMDS; i++) {
+        if (strcasecmp(CMDS[i], client->input[0]) == 0)
+            return ((*client->commands[i])(client));
+    }
     if (check_cmd(client->input[0]))
         wrong_cmd(client);
     return (0);
