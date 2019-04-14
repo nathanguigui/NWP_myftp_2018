@@ -17,8 +17,10 @@ SRCS	= 	src/my_ftp.c \
 			src/commands.c \
 			src/commands2.c \
 			src/commands3.c \
+			src/list_cmd.c \
 			src/str_to_tab.c \
 			src/passive.c \
+			src/active.c \
 			src/utils.c \
 			src/utils2.c
 

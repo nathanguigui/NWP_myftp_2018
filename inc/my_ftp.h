@@ -51,6 +51,8 @@ typedef struct client_s {
     char *ip;
     pasv_t *PASV;
     pid_t PASV_pid;
+    in_addr_t sin_addr;
+    int actv_sock;
 } client_t;
 
 typedef struct core_s {
@@ -73,6 +75,7 @@ int cdup_cmd(client_t *);
 int dele_cmd(client_t *);
 int pasv_cmd(client_t *);
 int list_cmd(client_t *);
+int port_cmd(client_t *);
 
 int wrong_cmd(client_t *);
 int other_cmd(client_t *);

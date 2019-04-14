@@ -16,7 +16,6 @@ int read_client(client_t *client)
     if (getline(&buff, &len, fdopen(client->socket, "r")) == 0)
         return (-1);
     tmp = strtok(buff, "\r");
-    tmp_buff = strdup(tmp);
     client->input = str_to_tab(tmp, ' ');
     return (0);
 }
@@ -77,6 +76,10 @@ int check_cmd(char *str)
     if (strcasecmp("DELE", str) == 0)
         return (0);
     if (strcasecmp("PASV", str) == 0)
+        return (0);
+    if (strcasecmp("LIST", str) == 0)
+        return (0);
+    if (strcasecmp("PORT", str) == 0)
         return (0);
     return (-1);
 }

@@ -17,9 +17,11 @@ void init_client(core_t *CORE, int sock, int i, struct sockaddr_in *csin)
     client->root_dir = strdup(CORE->root_dir);
     client->wd = strdup(CORE->root_dir);
     client->ip = inet_ntoa(csin->sin_addr);
+    client->sin_addr = csin->sin_addr.s_addr;
     CORE->clients[i] = client;
     client->PASV = NULL;
     client->PASV_pid = 0;
+    client->actv_sock = 0;
 }
 
 int client_shell(int i, core_t *CORE)
