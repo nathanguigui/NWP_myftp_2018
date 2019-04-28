@@ -58,6 +58,8 @@ typedef struct client_s {
     in_addr_t sin_addr;
     int actv_sock;
     int (*commands[NB_CMDS])(struct client_s *);
+    char *actv_ip;
+    int actv_port;
 } client_t;
 
 typedef struct core_s {
@@ -97,4 +99,5 @@ char **str_to_tab(char *, char);
 void read_input(client_t *);
 int pasv_proc(client_t *CLIENT, pid_t);
 char *get_ip(void);
+void usage(void);
 #endif /* !MY_FTP_H_ */

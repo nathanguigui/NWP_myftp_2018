@@ -34,12 +34,12 @@ int cwd_cmd(client_t *client)
     char *mess;
     DIR *tmp;
     if (client->input[1] == NULL)
-        return (write_client(client, "501 Usage: CWD [PATH]\n"));
+        return (write_client(client, "550\n"));
     if (realpath(client->input[1], NULL) == NULL)
-        return (write_client(client, "501 Invalid path.\n"));
+        return (write_client(client, "550 Invalid path.\n"));
     tmp = opendir(realpath(client->input[1], NULL));
     if (tmp == NULL)
-        return (write_client(client, "501 Invalid path.\n"));
+        return (write_client(client, "550 Invalid path.\n"));
     closedir(tmp);
     client->wd = realpath(client->input[1], NULL);
     asprintf(&mess, "250 '%s'\n", client->wd);

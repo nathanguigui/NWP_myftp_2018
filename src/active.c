@@ -7,19 +7,33 @@
 
 #include "my_ftp.h"
 
+char *check_ipstr(char *ip_str)
+{
+    if (ip_str == NULL)
+        return (NULL);
+    char **ip_tab = str_to_tab(ip_str, ',');
+    unsigned int i = 0;
+    for (i = 0; ip_tab[i]; i++);
+    if (i != 6)
+        return (NULL);
+    char *ret;
+    for (i = 0; i != 4; i++) {
+        if (i == 0)
+            asprintf(&ret, "%d", atoi(ip_tab[i]));
+        else
+            asprintf(&ret, "%s.%d", ret, atoi(ip_tab[i]));
+    }
+    return (ret);
+}
+
 int port_cmd(client_t *client)
 {
     if (client->input[1] == NULL)
         return (write_client(client, "501\n"));
-    struct sockaddr_in sin = {0};
-    sin.sin_addr.s_addr = client->sin_addr;
-    sin.sin_port = htons(atoi(client->input[1]));
-    sin.sin_family = AF_INET;
-    client->actv_sock = socket(AF_INET, SOCK_STREAM, 0);
-    socklen_t len = sizeof(sin);
-    if (connect(client->actv_sock, (struct sockaddr *)&sin, len) == -1) {
-        perror("connect");
+    if (!check_ipstr(client->input[1]))
         return (write_client(client, "501\n"));
-    }
+    client->actv_ip = check_ipstr(client->input[1]);
+    char **ip_tab = str_to_tab(client->input[1], ',');
+    client->actv_port = atoi(ip_tab[4]) * 255 + atoi(ip_tab[5]);
     return (write_client(client, "200\n"));
 }
