@@ -24,7 +24,8 @@ int noop_cmd(client_t *client)
 int help_cmd(client_t *client)
 {
     write_client(client, "214\n");
-    write_client(client, " CDUP CWD HELP NOOP PASS PWD QUIT USER\n");
+    write_client(client, " CDUP CWD HELP NOOP PASS\n");
+    write_client(client, " PWD QUIT RETR STOR USER\n");
     write_client(client, "214\n");
     return (0);
 }

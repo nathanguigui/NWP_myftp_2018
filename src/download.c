@@ -31,7 +31,7 @@ int retr_actv(client_t *client)
 {
     chdir(client->wd);
     if (access(realpath(client->input[1], NULL), R_OK))
-        return (write_client(client, "450 Can't access file"));
+        return (write_client(client, "450 Can't access file\n"));
     struct stat stat_buff = {0};
     stat(realpath(client->input[1], NULL), &stat_buff);
     char *mess;
@@ -58,7 +58,7 @@ int exec_retr_pasv(client_t *client)
     int cliSocket = accept(client->PASV->pasvSocket, (SOCK)client->PASV->csin,
     &csin_size);
     if (cliSocket < 0)
-    my_error("[PASV] accept()");
+        my_error("[PASV] accept()");
     dup2(cliSocket, 1);
     execvp(command, arg);
     close(cliSocket);
@@ -70,7 +70,7 @@ int retr_pasv(client_t *client)
 {
     chdir(client->wd);
     if (access(realpath(client->input[1], NULL), R_OK))
-        return (write_client(client, "450 Can't access file"));
+        return (write_client(client, "450 Can't access file\n"));
     struct stat stat_buff = {0};
     stat(realpath(client->input[1], NULL), &stat_buff);
     char *mess;
@@ -90,7 +90,7 @@ int retr_cmd(client_t *client)
     if (client->PASV == NULL && client->actv_ip == NULL)
         return (write_client(client, "425 Use PORT or PASV first.\n"));
     if (client->input[1] == NULL)
-        return (write_client(client, "501"));
+        return (write_client(client, "501\n"));
     if (client->actv_ip)
         retr_actv(client);
     else
