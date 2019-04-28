@@ -33,7 +33,7 @@
 #define AWAITING_PASS 2
 #define CONNECTED 1
 #define ERROR -1
-#define NB_CMDS 9
+#define NB_CMDS 10
 extern char *CMDS[NB_CMDS];
 
 typedef struct sockaddr * SOCK;
@@ -81,8 +81,9 @@ int cwd_cmd(client_t *);
 int cdup_cmd(client_t *);
 int dele_cmd(client_t *);
 int pasv_cmd(client_t *);
-int list_cmd(client_t *);
 int port_cmd(client_t *);
+int list_cmd(client_t *);
+int retr_cmd(client_t *);
 
 int wrong_cmd(client_t *);
 int other_cmd(client_t *);

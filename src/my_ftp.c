@@ -10,7 +10,8 @@
 char *CMDS[NB_CMDS]  = {
     "NOOP", "PWD", "HELP",
     "CDUP", "CWD", "DELE",
-    "PASV", "LIST", "PORT"
+    "PASV", "LIST", "PORT",
+    "RETR"
 };
 
 int main(int ac, char const **av)

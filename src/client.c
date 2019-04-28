@@ -18,6 +18,7 @@ void init_commands(client_t *client)
     client->commands[6] = &pasv_cmd;
     client->commands[7] = &list_cmd;
     client->commands[8] = &port_cmd;
+    client->commands[9] = &retr_cmd;
 }
 
 void init_client(core_t *CORE, int sock, int i, struct sockaddr_in *csin)

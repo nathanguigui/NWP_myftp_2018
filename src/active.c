@@ -34,6 +34,6 @@ int port_cmd(client_t *client)
         return (write_client(client, "501\n"));
     client->actv_ip = check_ipstr(client->input[1]);
     char **ip_tab = str_to_tab(client->input[1], ',');
-    client->actv_port = atoi(ip_tab[4]) * 255 + atoi(ip_tab[5]);
+    client->actv_port = atoi(ip_tab[4]) * 256 + atoi(ip_tab[5]);
     return (write_client(client, "200\n"));
 }

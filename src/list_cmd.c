@@ -33,10 +33,8 @@ int exec_list_actv(client_t *client)
 int list_actv(client_t *client)
 {
     write_client(client, "150 Here comes the directory listing.\n");
-    if (fork() == 0)
+    if (fork() == 0) {
         exec_list_actv(client);
-    else {
-        wait(NULL);
         write_client(client, "226 Directory send OK.\n");
         close(client->actv_sock);
         client->actv_sock = 0;
@@ -70,12 +68,11 @@ int exec_list_pasv(client_t *client)
 int list_pasv(client_t *client)
 {
     write_client(client, "150 Here comes the directory listing.\n");
-    if (fork() == 0)
+    if (fork() == 0) {
         exec_list_pasv(client);
-    else {
-        wait(NULL);
         write_client(client, "226 Directory send OK.\n");
     }
+    client->PASV = NULL;
     return (0);
 }
 
