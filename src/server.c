@@ -65,9 +65,10 @@ void server_base(int ac, char const **av)
     struct sockaddr_in csin = {0};
     int opt = TRUE;
 
-    if (check_arg(ac, av, &sin) == ERROR)
+    if (check_arg(ac, av, &sin) == ERROR) {
+        usage();
         exit(84);
-    if (mSocket == -1)
+    } if (mSocket == -1)
         my_error("[SERVER][ERROR]  socket()\t");
     if (setsockopt(mSocket, SOL_SOCKET, SO_REUSEADDR,
     (char *)&opt, sizeof(opt)))

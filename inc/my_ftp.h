@@ -33,7 +33,7 @@
 #define AWAITING_PASS 2
 #define CONNECTED 1
 #define ERROR -1
-#define NB_CMDS 9
+#define NB_CMDS 10
 extern char *CMDS[NB_CMDS];
 
 typedef struct sockaddr * SOCK;
@@ -58,6 +58,8 @@ typedef struct client_s {
     in_addr_t sin_addr;
     int actv_sock;
     int (*commands[NB_CMDS])(struct client_s *);
+    char *actv_ip;
+    int actv_port;
 } client_t;
 
 typedef struct core_s {
@@ -79,8 +81,9 @@ int cwd_cmd(client_t *);
 int cdup_cmd(client_t *);
 int dele_cmd(client_t *);
 int pasv_cmd(client_t *);
-int list_cmd(client_t *);
 int port_cmd(client_t *);
+int list_cmd(client_t *);
+int retr_cmd(client_t *);
 
 int wrong_cmd(client_t *);
 int other_cmd(client_t *);
@@ -97,4 +100,5 @@ char **str_to_tab(char *, char);
 void read_input(client_t *);
 int pasv_proc(client_t *CLIENT, pid_t);
 char *get_ip(void);
+void usage(void);
 #endif /* !MY_FTP_H_ */

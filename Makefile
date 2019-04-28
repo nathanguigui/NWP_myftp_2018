@@ -22,7 +22,9 @@ SRCS	= 	src/my_ftp.c \
 			src/passive.c \
 			src/active.c \
 			src/utils.c \
-			src/utils2.c
+			src/utils2.c \
+			src/download.c \
+			src/upload.c
 
 OBJS	= $(SRCS:.c=.o)
 

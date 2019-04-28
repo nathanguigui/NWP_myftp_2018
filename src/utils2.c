@@ -24,3 +24,8 @@ char *get_ip(void)
         my_error("inet_ntoa");
     return (IPbuffer);
 }
+
+void usage(void)
+{
+    printf("myftp [PORT] [PATH]\n");
+}
